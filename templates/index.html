@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Vita IA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+  <link rel="icon" href="{{url_for('static',filename='logo.jpg')}}" type="image/x-icon">
+</head>
+<body>
+
+
+<div class="container {% if datos_usuario %}hidden{% endif %}" id="bienvenida">
+    <img src="{{url_for('static',filename='logo.jpg')}}" alt="Logo Vita AI" class="logo" />
+    <h1>Bienvenido a Vita AI</h1>
+    <p>Vita AI es una pagina web en la cuál puedes incluir tus preferencias o problemas de salud para que la AI te de recomendaciones 
+    de alimentación y ejercicios de acuerdo a esta Información. 
+    Este proyecto nace debido a que Costa Rica país de orígen de los desarrolladores Daengel Alvarez Mora y Cesar Medina Neyra sufre problemas
+    de salud como la obesidad y el sobrepeso em adultos y niños, por lo que se busca insitar a las personas a mejorar su salud y con esto calidad de vida.</p>
+
+    <button id="startBtn">Empezar</button>
+</div>
+
+{% if not datos_usuario %}
+<div class="container hidden" id="inicio"> {# Se añade la clase 'hidden' para que esté oculto al cargar la página #}
+  <h1>Vita IA</h1>
+  <h2>Tu asistente inteligente</h2>
+  <form action="/" method="post">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required minlength="3" maxlength="100">
+
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" name="peso" required>
+
+    <label for="altura">Altura (cm):</label>
+    <input type="number" id="altura" name="altura" required>
+
+    <label for="edad">Edad:</label>
+    <input type="number" id="edad" name="edad" required>
+
+    <label for="sexo">Sexo:</label>
+    <select id="sexo" name="sexo" required>
+      <option value="masculino">Masculino</option>
+      <option value="femenino">Femenino</option>
+      <option value="otro">Otro</option>
+    </select>
+
+    <label for="informacion_adicional">Información a tener a cuenta:</label>
+    <input type="text" id="informacion_adicional" name="informacion_adicional" required>
+ 
+    <button type="submit">Calcular IMC</button> {# Se elimina el onclick para que el formulario se envíe normalmente #}
+  </form>
+</div>
+
+{% elif not datos_usuario.dietas or not datos_usuario.ejercicios %}
+<div class="container" id="opciones">
+  <h2>Bienvenido a tu panel de salud</h2>
+  <div id="mensajeBienvenida">{{ mensaje_bienvenida |safe }}</div>
+  <div class="recomendacion" id="dietaRecomendada">{{ dieta_recomendada|safe }}</div>
+
+  <form action="/" method="post">
+    <h3>Otras dietas disponibles</h3>
+    <label for="dietas">Selecciona una dieta alternativa:</label>
+    <select id="dietas" name="dietas" required>
+      <option value="equilibrada">Dieta equilibrada</option>
+      <option value="keto">Dieta keto</option>
+      <option value="vegetariana">Dieta vegetariana</option>
+      <option value="hipocalorica">Dieta hipocalorica</option>
+      <option value="bajaCarbohidratos">Dieta baja en carbohidratos</option>
+    </select>
+
+
+    <label for="ejercicios" style="margin-top: 2rem;">Selecciona un plan de ejercicio:</label>
+    <select id="ejercicios" name="ejercicios" required>
+     <option value="principiante">Principiante</option>
+     <option value="intermedio">Intermedio</option>
+     <option value="avanzado">Avanzado</option>
+     <option value="cardio">Cardio intensivo</option>
+    </select>  
+
+    <button type="submit">Continuar</button>
+  </form>
+</div>
+
+{% else %}
+<div class="chat-container" id="ia">
+  
+  <div class="chat-header">
+    <h2>Vita IA</h2>
+    <p>Tu asistente de salud personal</p>
+  </div>
+
+  <div class="chat-window" id="chat-window">
+    {% for item in history %}
+      <div class="chat-message user-message">
+        <p>{{ item.pregunta }}</p>
+      </div>
+      <div class="chat-message ai-message">
+        <p>{{ item.respuesta|safe }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <form class="chat-form" id="chat-form">
+    <textarea id="mensaje" name="mensaje" rows="1" placeholder="Escribe tu pregunta aquí..." required></textarea>
+    <button type="submit">➤</button>
+  </form>
+
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='app.js') }}" ></script>
+
+</body>
+</html>
