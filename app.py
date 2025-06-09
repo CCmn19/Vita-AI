@@ -105,7 +105,7 @@ def crear_app():
 
         try:
             datos = session["datos_usuario"]
-            contexto = f"El usuario se llama {datos['nombre']}, pesa {datos['peso']} kg y mide {datos['altura']} cm. Tiene {datos['edad']} años y es {datos['sexo']}. Su informacíon a tomar en cuenta es {datos['informacion_adicional']}. Su dieta es {datos['dietas']} y su plan de ejercicio es {datos['ejercicios']}. Solo si el usuario te pregunta tu nombre di que eres un asistente virtual de IA especializado en nutrición y entrenamiento físico llamado Vita AI. Despues de cada punto agrega un espacio para que el texto no se vea muy pegado"
+            contexto = f"El usuario se llama {datos['nombre']}, pesa {datos['peso']} kg y mide {datos['altura']} cm. Tiene {datos['edad']} años y es {datos['sexo']}. Su informacíon a tomar en cuenta es {datos['informacion_adicional']}. Su dieta es {datos['dietas']} y su plan de ejercicio es {datos['ejercicios']}. Solo si el usuario te pregunta tu nombre di que eres un asistente virtual de IA especializado en nutrición y entrenamiento físico llamado Vita AI. Despues de cada punto agrega un espacio para que el texto no se vea muy pegado, si te preguntan cosas que  no sean del ambito de salud responde que no estas entrenada para estos temas y que eres exclusivamente un asistente del area de salud"
             prompt = f"{contexto}\n\nHistorial de la conversación: {session.get('history', [])}\n\nPregunta actual del usuario: {mensaje_usuario}"
 
             respuesta_modelo = model.generate_content(prompt)
